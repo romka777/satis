@@ -118,6 +118,21 @@ EOT
         $io = $this->getIO();
         $io->loadConfiguration($this->getConfiguration());
 
+        $s3Config = [
+            'credentials' => [
+                'key' => getenv('S3_KEY'),
+                'secret' => getenv('S3_SECRET')
+            ],
+            'region' => getenv('S3_REGION') ? getenv('S3_REGION') : 'ru-central1',
+            'endpoint' => getenv('S3_ENDPOINT') ? getenv('S3_ENDPOINT') : 'http://storage.yandexcloud.net',
+            'version' => '2006-03-01',
+        ];
+
+        $s3Client = new \Aws\S3\S3Client($s3Config);
+        $s3Client->registerStreamWrapper();
+//        var_dump(is_dir('s3://satis/dist/vezubr/geocoder'));
+//        exit;
+
         if (preg_match('{^https?://}i', $configFile)) {
             $rfs = new RemoteFilesystem($io);
             $contents = $rfs->getContents(parse_url($configFile, PHP_URL_HOST), $configFile, false);

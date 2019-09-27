@@ -10,17 +10,36 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-function includeIfExists($file)
-{
-    if (file_exists($file)) {
-        return include $file;
+namespace Composer\Satis\Builder {
+    function realpath($dir)
+    {
+        return $dir;
     }
 }
 
-if ((!$loader = includeIfExists(__DIR__.'/../vendor/autoload.php')) && (!$loader = includeIfExists(__DIR__.'/../../../autoload.php'))) {
-    print('You must set up the project dependencies using Composer before you can use Satis.');
-    exit(1);
+namespace Composer\Package\Archiver {
+    function realpath($dir)
+    {
+        return $dir;
+    }
 }
 
-$application = new Composer\Satis\Console\Application();
-$application->run();
+namespace {
+
+    function includeIfExists($file)
+    {
+        if (file_exists($file)) {
+            return include $file;
+        }
+    }
+
+    if ((!$loader = includeIfExists(__DIR__ . '/../vendor/autoload.php')) && (!$loader = includeIfExists(__DIR__ . '/../../../autoload.php'))) {
+        print('You must set up the project dependencies using Composer before you can use Satis.');
+        exit(1);
+    }
+
+    $application = new Composer\Satis\Console\Application();
+    $application->run();
+
+}
+
