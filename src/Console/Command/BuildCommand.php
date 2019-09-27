@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Composer\Satis\Console\Command;
 
+use Aws\S3\S3Client;
 use Composer\Command\BaseCommand;
 use Composer\Config;
 use Composer\Config\JsonConfigSource;
@@ -123,12 +124,12 @@ EOT
                 'key' => getenv('S3_KEY'),
                 'secret' => getenv('S3_SECRET')
             ],
-            'region' => getenv('S3_REGION') ? getenv('S3_REGION') : 'ru-central1',
-            'endpoint' => getenv('S3_ENDPOINT') ? getenv('S3_ENDPOINT') : 'http://storage.yandexcloud.net',
+            'region' => getenv('S3_REGION') ?: 'ru-central1',
+            'endpoint' => getenv('S3_ENDPOINT') ?: 'http://storage.yandexcloud.net',
             'version' => '2006-03-01',
         ];
 
-        $s3Client = new \Aws\S3\S3Client($s3Config);
+        $s3Client = new S3Client($s3Config);
         $s3Client->registerStreamWrapper();
 //        var_dump(is_dir('s3://satis/dist/vezubr/geocoder'));
 //        exit;
